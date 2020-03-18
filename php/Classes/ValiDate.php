@@ -1,5 +1,5 @@
 <?php
-namespace DylanSmithcg\object-oriented;
+namespace DylanSmithcg\ObjectOriented;
 /**
  * Trait to Validate a mySQL Date
  *
