@@ -49,10 +49,10 @@ class author implements \JsonSerializable {
 	private $authorUsername;
 
 	/**
-	 * author constructor.
+	 * author constructor
 	 *
 	 * @param string|Uuid $newAuthorId id of this author or null if a new author
-	 * @param string $newAuthorActivationToken Token to protect agaisnt bad accounts
+	 * @param string $newAuthorActivationToken Token to protect against bad accounts
 	 * @param string $newAuthorAvatarUrl string containing newAuthorUsername can be null
 	 * @param string $newAuthorEmail string containing email
 	 * @param string $newAuthorHash string containg password hash
@@ -63,9 +63,21 @@ class author implements \JsonSerializable {
 	 * @throws \Exception if some other exception occurs
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
-	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
+	public function __construct($newAuthorId, string $newAuthorActivationToken, string $newAuthorAvatarUrl, string $newAuthorEmail, string $newAuthorHash, string $newAuthorUsername) {
 		try {
-					$this->
+			$this->setAuthorId($newAuthorId);
+			$this->setAuthorActivationToken($newAuthorActivationToken);
+			$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
+			$this->setAuthorEmail($newAuthorEmail);
+			$this->setAuthorHash($newAuthorHash);
+			$this->setAuthorUsername($newAuthorUsername);
 		}
+		catch(\InvalidArgumentException | \RangeException |\TypeError | \Exception $exception) {
+			//determine what exception type was thrown
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+	}
+
 
 }
