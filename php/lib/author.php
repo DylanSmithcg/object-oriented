@@ -7,6 +7,7 @@ require_once(dirname(__DIR__) . "/Classes/autoload.php");
 use DylanSmithcg\ObjectOriented\php\Classes\{Author};
 
 public function insert(\PDO $pdo) {
+
 	$query = "INSERT INTO Author(authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername) VALUES (:authorId, :authorAcivationToken, :authorAvatarUrl, :authorEmail, :authorHash, :authorUsername)";
 	$statement = $pdo->prepare($query);
 
@@ -15,6 +16,7 @@ public function insert(\PDO $pdo) {
 }
 
 public function upusername(\PDO $pdo) {
+
 	$query = "UPDATE Author SET authorActivationToken = :authorActivationToken, authorAvatarUrl = :authorAvatarUrl, authorEmail = :authorEmail, authorEmail = :authorEmail, authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
 	$statement = $pdo->prepare($query);
 
@@ -24,6 +26,7 @@ public function upusername(\PDO $pdo) {
 
 
 public function delete(\PDO $pdo) {
+
 	$query = "DELETE FROM Author WHERE authorId = :authorId";
 	$statement = $pdo->prepare($query);
 
@@ -32,11 +35,6 @@ public function delete(\PDO $pdo) {
 }
 
 public static function getAuthorByAuthorId(\PDO $pdo, $authorId):Author {
-	try {
-		$authorId = self::valiusernameUuid($authorId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
 	
 	$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author WHERE authorId = :authorId";
 	$statement = $pdo->prepare($query);
