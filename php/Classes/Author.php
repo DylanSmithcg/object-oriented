@@ -14,8 +14,8 @@ use Ramsey\Uuid\Uuid;
  * Class author
  * @package DylanSmithcg\ObjectOriented
  */
-class Author implements \vendor\JsonSerializable {
-	use php\Classes\ValidateUuid;
+class Author implements \JsonSerializable {
+	use ValidateUuid;
 	/**
 	 * id for this author; primary key
 	 * @var Uuid $authorId
@@ -200,19 +200,22 @@ class Author implements \vendor\JsonSerializable {
 		if(empty($newAuthorHash) === true) {
 			throw(new \InvalidArgumentException("author password hash empty or insecure"));
 		}
+		/*
 		//enforce the hash is really an Argon hash
 		$authorHashInfo = password_get_info($newAuthorHash);
 		if($authorHashInfo["algoName"] !== "argon2i")
 			throw(new \InvalidArgumentException("author hash is not a valid hash"));
 		}
-		/*
+
 		//enforce that the hash is exactly 97 characters.
 		if(strlen($newAuthorHash) !== 97) {
 			throw(new\RangeException("author hash has to be 97"));
-		//store the hash
-		$this->authorHash = $newAuthorHash;
 		}
 		*/
+		//store the hash
+		$this->authorHash = $newAuthorHash;
+	}
+
 	/**
 	 * accessor method for username
 	 * @return string value of username
@@ -243,16 +246,16 @@ class Author implements \vendor\JsonSerializable {
 	}
 	public function insert(\PDO $pdo) {
 
-		$query = "INSERT INTO Author(authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername) VALUES (:authorId, :authorAcivationToken, :authorAvatarUrl, :authorEmail, :authorHash, :authorUsername)";
+		$query = "INSERT INTO author(authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername) VALUES (:authorId, :authorAcivationToken, :authorAvatarUrl, :authorEmail, :authorHash, :authorUsername)";
 		$statement = $pdo->prepare($query);
 
 		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
 		$statement->execute($parameters);
 	}
 
-	public function upusername(\PDO $pdo) {
+	public function update(\PDO $pdo) {
 
-		$query = "UPDATE Author SET authorActivationToken = :authorActivationToken, authorAvatarUrl = :authorAvatarUrl, authorEmail = :authorEmail, authorEmail = :authorEmail, authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
+		$query = "UPDATE author SET authorActivationToken = :authorActivationToken, authorAvatarUrl = :authorAvatarUrl, authorEmail = :authorEmail, authorEmail = :authorEmail, authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
 
 		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
@@ -262,7 +265,7 @@ class Author implements \vendor\JsonSerializable {
 
 	public function delete(\PDO $pdo) {
 
-		$query = "DELETE FROM Author WHERE authorId = :authorId";
+		$query = "DELETE FROM author WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
 
 		$parameters = ["authorId" => $this->authorId->getBytes()];
@@ -302,7 +305,7 @@ class Author implements \vendor\JsonSerializable {
 		$query = "SELECT authorId, authorProfileId, authorUsername, authorUsername FROM author WHERE authorUsername";
 		$statement = $pdo->prepare($query);
 
-		$authorUsername = round(floatval($this->authorUsername->format("U.u")) * 1000);
+		//$authorUsername = round(floatval($this->authorUsername->format("U.u")) * 1000);
 		$parameters = ["authorUsername" => $authorUsername];
 		$statement->execute($parameters);
 
@@ -318,6 +321,16 @@ class Author implements \vendor\JsonSerializable {
 			}
 		}
 		return($authors);
+	}
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["tweetId"] = $this->tweetId->toString();
+		$fields["tweetProfileId"] = $this->tweetProfileId->toString();
+
+		//format the date so that the front end can consume it
+		$fields["tweetDate"] = round(floatval($this->tweetDate->format("U.u")) * 1000);
+		return($fields);
 	}
 
 }
