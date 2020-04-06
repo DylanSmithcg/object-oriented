@@ -3,6 +3,8 @@
 namespace DylanSmithcg\ObjectOriented;
 require_once("autoload.php");
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
+
+use JsonSerializable;
 use Ramsey\Uuid\Uuid;
 
 
@@ -14,8 +16,9 @@ use Ramsey\Uuid\Uuid;
  * Class author
  * @package DylanSmithcg\ObjectOriented
  */
-class Author implements \JsonSerializable {
-	use ValidateUuid;
+class Author implements JsonSerializable {
+	//use ValidateUuid;
+	//use ValidateDate;
 	/**
 	 * id for this author; primary key
 	 * @var Uuid $authorId
@@ -91,7 +94,8 @@ class Author implements \JsonSerializable {
 	 */
 	public function setAuthorId($newAuthorId) {
 		try {
-			$uuid = self::validateUuid($newAuthorId);
+			//$uuid = self::validateUuid($newAuthorId);
+			$uuid = $newAuthorId;
 		} catch(\InvalidArgumentException \RangeException \Exception \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
