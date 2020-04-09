@@ -337,4 +337,8 @@ class Author implements JsonSerializable {
 		return($fields);
 	}
 
+
+
+
+
 }
