@@ -8,7 +8,7 @@ use PHPUnit\DbUnit\Database\Connection;
 use PHPUnit\DbUnit\Operation\{Composite, Factory, Operation};
 
 // grab the encrypted properties file
-require_once("/etc/apache2/capstone-mysql/Secret.php");
+require_once("/etc/apache2/capstone-mysql/Secrets.php");
 
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 
@@ -47,7 +47,7 @@ abstract class DataDesignTest extends TestCase {
 
 		// add all the tables for the project here
 		// THESE TABLES *MUST* BE LISTED IN THE SAME ORDER THEY WERE CREATED!!!!
-		$dataset->addTable("profile");
+		$dataset->addTable("author");
 		$dataset->addTable("tweet");
 		// the second parameter is required because like is also a SQL keyword and is the only way PHPUnit can query the like table
 		$dataset->addTable("like", "SELECT likeProfileId, likeTweetId, likeDate FROM `like`");
@@ -89,7 +89,7 @@ abstract class DataDesignTest extends TestCase {
 			// connect to mySQL and provide the interface to PHPUnit
 
 
-			$secrets =  new Secrets("/etc/apache2/capstone-mysql/ddctwitter.ini");
+			$secrets =  new Secrets("/etc/apache2/capstone-mysql/cohort28.ini");
 			$pdo = $secrets->getPdoObject();
 			$this->connection = $this->createDefaultDBConnection($pdo, $secrets->getDatabase());
 		}
