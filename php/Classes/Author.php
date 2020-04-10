@@ -3,6 +3,7 @@
 namespace DylanSmithcg\ObjectOriented;
 require_once("autoload.php");
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
+//require_once("ValidateUuid.php");
 
 use JsonSerializable;
 use Ramsey\Uuid\Uuid;
@@ -17,7 +18,7 @@ use Ramsey\Uuid\Uuid;
  * @package DylanSmithcg\ObjectOriented
  */
 class Author implements JsonSerializable {
-	//use ValidateUuid;
+	use ValidateUuid;
 	//use ValidateDate;
 	/**
 	 * id for this author; primary key
@@ -94,8 +95,8 @@ class Author implements JsonSerializable {
 	 */
 	public function setAuthorId($newAuthorId) {
 		try {
-			//$uuid = self::validateUuid($newAuthorId);
-			$uuid = $newAuthorId;
+			$uuid = self::validateUuid($newAuthorId);
+			//$uuid = $newAuthorId;
 		} catch(\InvalidArgumentException \RangeException \Exception \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
@@ -250,7 +251,7 @@ class Author implements JsonSerializable {
 	}
 	public function insert(\PDO $pdo) {
 
-		$query = "INSERT INTO author(authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername) VALUES (:authorId, :authorAcivationToken, :authorAvatarUrl, :authorEmail, :authorHash, :authorUsername)";
+		$query = "INSERT INTO author(authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername) VALUES (:authorId, :authorActivationToken, :authorAvatarUrl, :authorEmail, :authorHash, :authorUsername)";
 		$statement = $pdo->prepare($query);
 
 		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];

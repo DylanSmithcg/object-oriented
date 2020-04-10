@@ -39,7 +39,7 @@ class AuthorTest extends DataDesignTest {
 		$author->insert($this->getPDO());
 
 		//check count of author records in the db after the insert
-		$numRows = $this->getConnection()->getRowCount("author");
+		$numRowsAfterInsert = $this->getConnection()->getRowCount("author");
 		self::assertEquals($numRows + 1, $numRowsAfterInsert, "insert checked record count");
 
 		//get a copy of the record just inserted and validate the values
