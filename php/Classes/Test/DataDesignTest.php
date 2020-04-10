@@ -47,7 +47,7 @@ abstract class DataDesignTest extends TestCase {
 
 		// add all the tables for the project here
 		// THESE TABLES *MUST* BE LISTED IN THE SAME ORDER THEY WERE CREATED!!!!
-		$dataset->addTable("like", "SELECT likeProfileId, likeTweetId, likeDate FROM `like`");
+		$dataset->addTable("like", "SELECT likeAuthorId, likeDate FROM `like`");
 		return($dataset);
 	}
 
